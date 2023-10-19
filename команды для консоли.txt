@@ -1,0 +1,48 @@
+from django.contrib.auth.models import User 
+from news.models import *
+from django.db.models import Sum
+1)Создать двух пользователей (с помощью метода User.objects.create_user('username')).
+user1=User.objects.create_user('Boris')    
+user2=User.objects.create_user('Alex')
+2)Создать два объекта модели Author, связанные с пользователями.
+author1 = Author.objects.create(user=user1)
+author2 = Author.objects.create(user=user2)
+3)Добавление 4 категорий в модель Category:
+category1 = Category.objects.create(name='Хроника')
+category2 = Category.objects.create(name='История')
+category3 = Category.objects.create(name='Слух')
+category4 = Category.objects.create(name='Инсайд')
+4)Добавление 2 статей и 1 новости:
+post1 = Post.objects.create(title='О котятах', post_type = 'AR', text='За последнее десятилетие количество котят, появляющихся в наших домах, растет с каждым годом.', author=author1) 
+post2 = Post.objects.create(title='Слух о козе', post_type = 'AR', text='Среди жителей маленького села распространяется слух о козе, которая, как утверждают, обладает сверхъестественными способностями', author=author2)
+post3 = Post.objects.create(title='Новость Инсайд про енотов', post_type = 'NW', text='Еноты - это удивительные животные, обладающие уникальными чертами и поведением', author=author1)
+5)Присвоение категорий статьям/новостям:
+Post.objects.get(id=1).postCategory.add(category1, category2) 
+post2.postCategory.add(category3)
+post3.postCategory.add(category4, category2)
+6)Создание 4 комментариев к разным объектам модели Post:
+comment1 = Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=user1, text='Мне нравится')  
+comment2 = Comment.objects.create(commentPost=post2, commentUser=user2, text='Отличная работа профессионала')
+comment3 = Comment.objects.create(commentPost=post1, commentUser=user2, text='Люблю котят')
+comment4 = Comment.objects.create(commentPost=post2, commentUser=user1, text='не плохо')
+7)Используя функции like() и dislike(), скорректирование рейтингов объектов:
+post1.like() (три раза)
+post2.dislike() (два раза)
+comment1.like()
+comment3.dislike()
+8)Обновление рейтингов пользователей:
+ Author.objects.get(id=1).update_rating() 
+ Author.objects.get(id=2).update_rating() 
+9)Вывод username и рейтинга лучшего пользователя:
+a = Author.objects.order_by('-ratingAuthor')[:1]
+print(a.user.username, a.rating)
+10)Вывод даты добавления, username автора, рейтинга, заголовка и превью лучшей статьи:
+best_post = Post.objects.order_by('-rating').first()
+print(best_post.dateCreation, best_post.author.user.username, best_post.rating, best_post.title, best_post.text[:50])
+(пример вывода) 2023-10-18 23:29:02.464573+00:00 Boris 3 О котятах За последнее десятилетие количество котят, появляю
+11)Вывод всех комментариев (дата, пользователь, рейтинг, текст) к этой статье:
+python
+comments = Comment.objects.filter(commentPost=best_post)
+for comment in comments:
+    print(comment.dateCreation, comment.user.username, comment.rating, comment.text
+
