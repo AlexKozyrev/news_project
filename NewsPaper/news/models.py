@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.core.validators import MinValueValidator
 
 
 class Author(models.Model):
@@ -60,10 +61,16 @@ class Post(models.Model):
         # превью статьи на 124 символа
         return self.text[0:123] + '...'
 
+    def __str__(self):
+        return f'{self.title}: {self.preview()[:20]}'
+
 
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.contributable_attrs.name
 
 
 class Comment(models.Model):
@@ -80,3 +87,5 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+

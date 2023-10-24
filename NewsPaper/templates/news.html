@@ -1,0 +1,36 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% block title %}
+Newspaper
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары python manage.py runserver-->
+{% block content %}
+   <h1>Все новости</h1>
+   <h3>
+       Сегодня новостей:
+       {{ news|length}}
+   </h3>
+   <hr>
+   {% if news %}
+      <table>
+          <tr>
+              <td>Заголовок</td>
+              <td>Дата публикации</td>
+              <td>Начало</td>
+          </tr>
+          {% for post in news %}
+          <tr>
+              <td>{{ post.title | censor}}</td>
+              <td>{{ post.dateCreation|date:'d.m.Y' }}</td>
+              <td>{{ post.text |truncatechars:20| censor }}</td>
+          </tr>
+          {% endfor %}
+      </table>
+   {%else %}
+       <h2>Новостей нет!</h2>
+   {% endif %}
+{% endblock content %}
+
+
+
