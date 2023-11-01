@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.validators import MinValueValidator
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -38,15 +39,10 @@ class Post(models.Model):
         (ARTICLE, 'Статья'),
     )
     post_type = models.CharField(choices=CATEGORY_CHOICES, max_length=2, default=ARTICLE)
-    # автоматически добавляемая дата и время создания;
     dateCreation = models.DateTimeField(auto_now_add=True)
-    # связь с моделью Category (с PostCategory);
     postCategory = models.ManyToManyField(Category, through='PostCategory')
-    # заголовок статьи/новости
     title = models.CharField(max_length=128)
-    # текст статьи/новости
     text = models.TextField()
-    # рейтинг статьи/новости
     rating = models.SmallIntegerField(default=0)
 
     def like(self):
@@ -63,6 +59,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title}: {self.preview()[:20]}'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 
 class PostCategory(models.Model):
