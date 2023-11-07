@@ -38,10 +38,10 @@ Newspaper
                     {% endif %}
                     {% if perms.news.delete_post %}
                        {% if post.post_type == 'NW' %}
-                       <a href="{% url 'news_delete' post.id %}">Редактировать</a>
+                       <a href="{% url 'news_delete' post.id %}">Удалить новость</a>
                        {% endif %}
                        {% if post.post_type == 'AR' %}
-                       <a href="{% url 'article_delete' post.id %}">Удалить</a>
+                       <a href="{% url 'article_delete' post.id %}">Удалить статью</a>
                        {% endif %}
                     {% endif %}
                 </td>
