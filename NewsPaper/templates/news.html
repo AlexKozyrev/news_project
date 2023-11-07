@@ -6,10 +6,10 @@ Newspaper
 
 {% block content %}
    <h1>Все новости</h1>
-   <a href="{% url 'news_search' %}">Поиск</a>
+   <p><a href="{% url 'news_search' %}">Поиск</a></p>
    {% if perms.news.add_post %}
-   <a href="{% url 'news_create' %}">Добавить новость</a>
-   <a href="{% url 'article_create' %}">Добавить статью</a>
+   <p><a href="{% url 'news_create' %}">Добавить новость</a></p>
+   <p><a href="{% url 'article_create' %}">Добавить статью</a></p>
    {% endif %}
    <hr>
    {% if news %}
