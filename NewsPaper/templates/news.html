@@ -4,15 +4,13 @@
 Newspaper
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все товары python manage.py runserver-->
 {% block content %}
    <h1>Все новости</h1>
-   <form action="" method="get">
-       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
-       {{ filterset.form.as_p }}
-       {# Добавим кнопку отправки данных формы #}
-       <input type="submit" value="Найти" />
-   </form>
+   <a href="{% url 'news_search' %}">Поиск</a>
+   {% if perms.news.add_post %}
+   <a href="{% url 'news_create' %}">Добавить новость</a>
+   <a href="{% url 'article_create' %}">Добавить статью</a>
+   {% endif %}
    <hr>
    {% if news %}
       <table>
@@ -20,12 +18,33 @@ Newspaper
               <td>Заголовок</td>
               <td>Дата публикации</td>
               <td>Начало</td>
+              {% if perms.news.change_post or perms.news.delete_post %}
+                <td>Действия</td>
+                {% endif %}
           </tr>
           {% for post in news %}
           <tr>
               <td>{{ post.title | censor}}</td>
               <td>{{ post.dateCreation|date:'d.m.Y' }}</td>
               <td>{{ post.text |truncatechars:20| censor }}</td>
+              <td>
+                    {% if perms.news.change_post %}
+                       {% if post.post_type == 'NW' %}
+                       <a href="{% url 'news_update' post.id %}">Редактировать</a>
+                       {% endif %}
+                       {% if post.post_type == 'AR' %}
+                       <a href="{% url 'article_update' post.id %}">Редактировать</a>
+                       {% endif %}
+                    {% endif %}
+                    {% if perms.news.delete_post %}
+                       {% if post.post_type == 'NW' %}
+                       <a href="{% url 'news_delete' post.id %}">Редактировать</a>
+                       {% endif %}
+                       {% if post.post_type == 'AR' %}
+                       <a href="{% url 'article_delete' post.id %}">Удалить</a>
+                       {% endif %}
+                    {% endif %}
+                </td>
           </tr>
           {% endfor %}
       </table>
