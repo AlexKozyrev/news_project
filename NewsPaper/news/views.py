@@ -143,3 +143,17 @@ def categories(request):
     for category in categories:
         category.subscribed = category.subscribers.filter(id=user.id).exists()
     return render(request, 'categories.html', {'categories': categories})
+
+
+
+#class Subscription(models.Model):
+#    user = models.ForeignKey(
+#        to=User,
+#        on_delete=models.CASCADE,
+#       related_name='subscriptions',
+#    )
+#    category = models.ForeignKey(
+#        to='Category',
+#        on_delete=models.CASCADE,
+#       related_name='subscriptions',
+#   )
