@@ -134,3 +134,12 @@ def unsubscribe(request, pk):
 
     message = 'Вы отписались от категории'
     return render(request, 'subscription_message.html', {'postCategory': category, 'message': message})
+
+
+@login_required
+def categories(request):
+    user = request.user
+    categories = Category.objects.all()
+    for category in categories:
+        category.subscribed = category.subscribers.filter(id=user.id).exists()
+    return render(request, 'categories.html', {'categories': categories})

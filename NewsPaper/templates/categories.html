@@ -1,0 +1,19 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Subscriptions
+{% endblock title %}
+
+{% block content %}
+   <h1>Все категории</h1>
+   {% for category in categories %}
+       <div>
+           <h1>{{ category.name }}</h1> <!-- Используйте поле из модели Category, которое содержит имя категории -->
+           {% if category.subscribed %}
+               <a href="{% url 'unsubscribe' category.id %}">Unsubscribe</a>
+           {% else %}
+               <a href="{% url 'subscribe' category.id %}">Subscribe</a>
+           {% endif %}
+       </div>
+   {% endfor %}
+{% endblock content %}

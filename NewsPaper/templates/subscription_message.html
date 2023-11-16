@@ -2,5 +2,6 @@
 
 {% block content %}
 <h1 class="text-center">{{ message }} {{ postCategory }}</h1>
+<p><a href="{% url 'categories' %}">Все подписки</a></p>
 <p><a href="{% url 'main_page' %}">На главную</a></p>
 {% endblock content %}
