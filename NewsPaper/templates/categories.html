@@ -8,7 +8,7 @@ Subscriptions
    <h1>Все категории</h1>
    {% for category in categories %}
        <div>
-           <h1>{{ category.name }}</h1> <!-- Используйте поле из модели Category, которое содержит имя категории -->
+           <h1>{{ category.name }}</h1>
            {% if category.subscribed %}
                <a href="{% url 'unsubscribe' category.id %}">Unsubscribe</a>
            {% else %}
