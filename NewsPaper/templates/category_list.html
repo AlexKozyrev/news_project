@@ -7,23 +7,24 @@ Newspaper
 {% block content %}
    <h1>Все новости</h1>
    <p><a href="{% url 'news_search' %}">Поиск</a></p>
-   {% if perms.news.add_post %}
-   <p><a href="{% url 'news_create' %}">Добавить новость</a></p>
-   <p><a href="{% url 'article_create' %}">Добавить статью</a></p>
-   {% endif %}
+    {% if is_not_subscriber %}
+    <p class="text-center"><a href="{% url 'subscribe' postCategory.id %}">Подписаться</a></p>
+    {% endif %}
+    {% if is_subscriber %}
+    <p class="text-center"><a href="{% url 'unsubscribe' postCategory.id %}">Отписаться</a></p>
+    {% endif %}
    <hr>
-   {% if news %}
+   {% if category_news_list %}
       <table>
           <tr>
               <td>Заголовок</td>
               <td>Дата публикации</td>
               <td>Начало</td>
-              <td>Категории</td>
               {% if perms.news.change_post or perms.news.delete_post %}
                 <td>Действия</td>
                 {% endif %}
           </tr>
-          {% for post in news %}
+          {% for post in category_news_list %}
           <tr>
               <td>{{ post.title | censor}}</td>
               <td>{{ post.dateCreation|date:'d.m.Y' }}</td>
@@ -80,6 +81,3 @@ Newspaper
        {% endif %}
    {% endif %}
 {% endblock content %}
-
-
-
