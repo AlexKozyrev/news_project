@@ -6,7 +6,6 @@ from .models import Post, Category
 from .filters import NewsFilter
 from .forms import NewsForm, ArticleForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from .tasks import notify_subscribers
 
 
 class NewsList(ListView):
@@ -50,7 +49,6 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'NW'
-        notify_subscribers.delay(post.id)
         return super().form_valid(form)
 
 
@@ -63,7 +61,6 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'AR'
-        notify_subscribers.delay(post.id)
         return super().form_valid(form)
 
 
