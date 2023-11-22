@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -149,10 +151,24 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = "почта"
-EMAIL_HOST_PASSWORD = "пароль"
+EMAIL_HOST_USER = "example@gmail.com"
+EMAIL_HOST_PASSWORD = "example@gmail.com"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
 APSCHEDULER_RUN_TIMEOUT = 25
-DEFAULT_FROM_EMAIL = "почта"
+DEFAULT_FROM_EMAIL = "example@gmail.com"
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+
+CELERY_BEAT_SCHEDULE = {
+    'weekly_newsletter': {
+        'task': 'news.tasks.weekly_notify',
+        'schedule': crontab(day_of_week='mon', hour=8),
+    },
+}
