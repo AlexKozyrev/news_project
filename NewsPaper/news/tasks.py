@@ -18,9 +18,9 @@ def notify_subscribers(post_id):
     subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
     subject = f'Новый пост в категории {",".join(categories)}'
     text_content = (
-        f'Название: {instance.title}\n'
+        f'Название поста: {instance.title}\n'
         f'Preview: {instance.preview}\n'
-        f'Link: {SITE_URL}{instance.get_absolute_url()}'
+        f'Ссылка: {SITE_URL}{instance.get_absolute_url()}'
     )
     for subscriber in subscribers:
         msg = EmailMultiAlternatives(subject, text_content, None, [subscriber])
@@ -30,13 +30,9 @@ def notify_subscribers(post_id):
 @shared_task
 def weekly_notify():
     print("Hello")
-    last_execution = DjangoJobExecution.objects.filter(job__id='weekly_notify').last()
     today = datetime.now()
-    if last_execution:
-        last_execution_date = last_execution.run_etime.astimezone(timezone(settings.TIME_ZONE))
-    else:
-        last_execution_date = today - timedelta(weeks=1)
-    posts = Post.objects.filter(dateCreation__gte=last_execution_date)
+    last_date = today - timedelta(weeks=1)
+    posts = Post.objects.filter(dateCreation__gte=last_date)
     categories = set(posts.values_list('postCategory__name', flat=True))
     subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
     html_content = render_to_string(
@@ -54,8 +50,3 @@ def weekly_notify():
     )
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
-    if last_execution:
-        last_execution.run_etime = today
-        last_execution.save()
-    else:
-        DjangoJobExecution(job_id='weekly_notify', run_etime=today)
