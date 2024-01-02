@@ -28,7 +28,7 @@ Newspaper search
 
            {% for post in news_search %}
            <tr>
-               <td>{{ post.title | censor}}</td>
+               <td><a href="{% url 'post_detail' post.pk %}">{{ post.title | censor }}</a></td>
                <td>{{ post.dateCreation|date:'d.m.Y' }}</td>
                <td>{{ post.text |truncatechars:20| censor }}</td>
            </tr>
