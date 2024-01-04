@@ -5,8 +5,8 @@ from .views import (NewsList, PostDetail, NewsSearch, NewsCreate, NewsDelete, Ne
                     ArticleDelete, CategoryListView, subscribe, unsubscribe, categories)
 
 urlpatterns = [
-    path('', cache_page(60)(NewsList.as_view()), name='main_page'),
-    path('<int:pk>', cache_page(60*5)(PostDetail.as_view()), name='post_detail'),
+    path('', cache_page(60)(NewsList.as_view()), name='main_page'), #
+    path('<int:pk>', PostDetail.as_view(), name='post_detail'), #cache_page(60*5)()
     path('search/', NewsSearch.as_view(), name='news_search'),
     path('news/create/', NewsCreate.as_view(), name='news_create'),
     path('news/<int:pk>/edit/', NewsUpdate.as_view(), name='news_update'),

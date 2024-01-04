@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -69,6 +70,13 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        try:
+            cache.delete(f'news-{self.pk}')
+        except:
+            print('not-work')
 
 
 

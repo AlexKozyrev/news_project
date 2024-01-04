@@ -1,0 +1,17 @@
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 11646
+"GET /61 HTTP/1.1" 200 2269
+C:\Users\megaa\PycharmProjects\news_project\NewsPaper\NewsPaper\settings.py changed, reloading.
+2024-01-05 01:37:56,635 INFO Watching for file changes with StatReloader
+2024-01-05 01:37:58,373 INFO "GET / HTTP/1.1" 200 11646
+2024-01-05 01:37:59,735 INFO "GET / HTTP/1.1" 200 11646
+2024-01-05 01:38:00,451 INFO "GET /61 HTTP/1.1" 200 2269
+2024-01-05 01:45:11,940 INFO C:\Users\megaa\PycharmProjects\news_project\NewsPaper\NewsPaper\settings.py changed, reloading.
+2024-01-05 01:45:12,490 INFO Watching for file changes with StatReloader
+2024-01-05 01:47:09,803 INFO C:\Users\megaa\PycharmProjects\news_project\NewsPaper\news\views.py changed, reloading.
+2024-01-05 01:47:10,318 INFO Watching for file changes with StatReloader
+2024-01-05 01:47:14,429 INFO "GET /59 HTTP/1.1" 200 2327
+2024-01-05 01:47:16,442 INFO "GET /61 HTTP/1.1" 200 2269
+2024-01-05 01:48:02,128 INFO C:\Users\megaa\PycharmProjects\news_project\NewsPaper\NewsPaper\settings.py changed, reloading.
+2024-01-05 01:48:02,634 INFO Watching for file changes with StatReloader
+2024-01-05 01:49:27,706 INFO C:\Users\megaa\PycharmProjects\news_project\NewsPaper\NewsPaper\settings.py changed, reloading.

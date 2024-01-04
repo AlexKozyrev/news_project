@@ -1,0 +1,9 @@
+2024-01-05 02:15:06,039 ERROR "GET / HTTP/1.1" 500 59 
+C:\Users\megaa\PycharmProjects\news_project\venv\lib\site-packages\django\core\servers\basehttp.py
+ None
+2024-01-05 02:15:10,817 ERROR "GET / HTTP/1.1" 500 59 
+C:\Users\megaa\PycharmProjects\news_project\venv\lib\site-packages\django\core\servers\basehttp.py
+ None
+2024-01-05 02:16:53,626 ERROR "GET / HTTP/1.1" 500 59 
+C:\Users\megaa\PycharmProjects\news_project\venv\lib\site-packages\django\core\servers\basehttp.py
+ None

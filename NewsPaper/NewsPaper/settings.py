@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import logging
 from pathlib import Path
 import os
 
@@ -177,5 +177,110 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style': '{',
+    'formatters': {
+        'simple': {  # для консоли уровня DEBUG
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+        'verbose': {  # для general.log
+            'format': '%(asctime)s %(levelname)s  %(module)s %(message)s',
+        },
+        'error': {  # для уровня ERROR и CRITICAL
+            'format': '%(asctime)s %(levelname)s %(message)s \n%(pathname)s\n %(exc_info)s'
+        },
+        'warning': {  # для уровня WARNING
+            'format': '%(asctime)s %(levelname)s %(message)s\n%(pathname)s\n'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['main_log', 'console_simple', 'console_warning', 'console_error'],
+            'level': 'DEBUG',  # 'INFO', DEBUG по условию задачи
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'errors_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['mail_admins', 'errors_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+    'handlers': {
+        'main_log': {
+            'level': 'INFO',  # 'INFO' по условию задачи
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
+            'filters': ['require_debug_false']  # в debug.log сообщения отправляются только при DEBUG = False
+        },
+        'console_simple': {  # вывод DEBUG или INFO в консоль
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',  # 'INFO', DEBUG по условию задачи
+            'filters': ['require_debug_true'],  # в консоль сообщения отправляются только при DEBUG = True
+            'formatter': 'warning'
+        },
+        'console_warning': {  # вывод предупреждений в консоль
+            'class': 'logging.StreamHandler',
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],  # в консоль сообщения отправляются только при DEBUG = True
+            'formatter': 'warning'
+        },
+        'console_error': {  # вывод ошибок в консоль
+            'class': 'logging.StreamHandler',
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],  # в консоль сообщения отправляются только при DEBUG = True
+            'formatter': 'warning'
+        },
+        'mail_admins': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'level': 'ERROR',
+            'formatter': 'warning',  # без стека ошибок
+            'filters': ['require_debug_false'],
+        },
+        'errors_file': {
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'level': 'ERROR',
+            'formatter': 'error'
+        },
+        'security_file': {
+            'class': 'logging.FileHandler',  # 'logging.handlers.RotatingFileHandler',
+            'filename': 'security.log',
+            'level': 'INFO',  # в условии задачи не указано
+            'formatter': 'verbose'
+        },
     }
 }

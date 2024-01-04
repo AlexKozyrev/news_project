@@ -1,4 +1,7 @@
+import logging
+
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
@@ -7,8 +10,11 @@ from .filters import NewsFilter
 from .forms import NewsForm, ArticleForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
+logger = logging.getLogger(__name__)
+
 
 class NewsList(ListView):
+    #logger.info('INFO')
     model = Post
     ordering = '-dateCreation'
     template_name = 'news.html'
@@ -17,13 +23,24 @@ class NewsList(ListView):
 
 
 class PostDetail(DetailView):
-    model = Post
+    # model = Post
+    logger.info('INFO')
     template_name = 'post.html'
     context_object_name = 'post'
+    queryset = Post.objects.all()
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'news-{self.kwargs["pk"]}',
+                        None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'news-{self.kwargs["pk"]}', obj)
+        return obj
 
 
 class NewsSearch(ListView):
     model = Post
+    logger.info('INFO')
     ordering = '-dateCreation'
     template_name = 'news_search.html'
     context_object_name = 'news_search'
@@ -143,5 +160,3 @@ def categories(request):
     for category in categories:
         category.subscribed = category.subscribers.filter(id=user.id).exists()
     return render(request, 'categories.html', {'categories': categories})
-
-
